@@ -1,0 +1,29 @@
+// 08. Ma trận: danh sách của danh sách.
+Lớp Ma Trận {
+    Hàm tổng hàng(danh sách số nguyên hàng) trả về số nguyên {
+        đặt tổng là 0
+        với mỗi x trong hàng { tổng += x }
+        trả về tổng
+    }
+
+    Hàm gốc {
+        đặt ma trận là [[1, 2, 3], [4, 5, 6]]
+        in("Phần tử [1][2] = {ma trận[1][2]}")
+        in("Số hàng: {độ dài của ma trận}, số cột: {độ dài của ma trận[0]}")
+
+        với mỗi hàng trong ma trận {
+            in("Tổng hàng: {tổng hàng(hàng)}")
+        }
+
+        ma trận[0][0] là 100
+        in(ma trận)
+
+        đặt danh sách danh sách số nguyên bảng là []
+        lặp i từ 1 đến 2 {
+            đặt danh sách số nguyên dòng là []
+            lặp j từ 1 đến 2 { thêm i nhân j vào dòng }
+            thêm dòng vào bảng
+        }
+        in(bảng)
+    }
+}

@@ -1,0 +1,30 @@
+// Ví dụ: vòng lặp đếm, danh sách co giãn, và nhập từ bàn phím.
+Lớp DanhSách {
+    Hàm tổng(danh sách số nguyên ds) trả về số nguyên {
+        đặt biến kết_quả là 0
+        với mỗi x trong ds {
+            kết_quả là kết_quả cộng x
+        }
+        trả về kết_quả
+    }
+
+    Hàm gốc {
+        nhập chữ tên tên với lời nhắc "Bạn tên gì? "
+        nhập số nguyên tên n với lời nhắc "Đếm đến mấy? "
+
+        đặt danh sách số nguyên bình_phương là []
+        lặp i từ 1 đến n {
+            thêm i nhân i vào bình_phương // [1,...n^2]
+        }
+        in("Chào " + tên +  ", bình phương: " + bình_phương)
+
+        bình_phương[0] là 100
+        xóa phần tử thứ 1 khỏi bình_phương
+        in("Sau khi sửa: " cộng bình_phương)
+        in("Phần tử cuối: " cộng bình_phương[độ dài của bình_phương trừ 1])
+        in("Tổng: " cộng tổng(bình_phương))
+
+        đặt biến điểm là [7, 8 và 9]
+        in("Điểm đầu: " cộng điểm[0] cộng ", số điểm: " cộng độ dài của điểm)
+    }
+}

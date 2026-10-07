@@ -1,0 +1,31 @@
+// 10. Thống kê từ: danh sách chữ, đếm, tìm kiếm, viết gọn bằng ký hiệu.
+Lớp Thống Kê {
+    Hàm có trong(danh sách chữ ds, chữ từ) -> luận lý {
+        với mỗi x : ds {
+            nếu x == từ { -> đúng }
+        }
+        -> sai
+    }
+
+    Hàm gốc {
+        đặt các từ = ["táo", "cam", "táo", "xoài", "cam", "táo"]
+        đặt danh sách chữ đã gặp = []
+        đặt danh sách số nguyên số lần = []
+
+        với mỗi từ : các từ {
+            nếu !có trong(đã gặp, từ) {
+                thêm từ vào đã gặp
+                thêm 0 vào số lần
+            }
+        }
+
+        lặp i = 0 .. #đã gặp - 1 {
+            với mỗi từ : các từ {
+                nếu từ == đã gặp[i] { số lần[i] = số lần[i] + 1 }
+            }
+            in("{đã gặp[i]}: {số lần[i]}")
+        }
+
+        nếu #các từ > 5 && có trong(các từ, "xoài") { in("Có xoài, tổng {#các từ} từ") }
+    }
+}

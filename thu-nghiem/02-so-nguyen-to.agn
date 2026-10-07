@@ -1,0 +1,35 @@
+// 02. Số nguyên tố và FizzBuzz.
+Lớp Số Học {
+    Hàm kiểm tra nguyên tố(số nguyên n) trả về luận lý {
+        nếu n nhỏ hơn 2 thì {
+            trả về sai
+        }
+        lặp i từ 2 đến n chia 2 {
+            nếu n chia dư i bằng với 0 thì {
+                trả về sai
+            }
+        }
+        trả về đúng
+    }
+
+    Hàm gốc {
+        lặp i từ 1 đến 20 {
+            nếu không phải kiểm tra nguyên tố(i) thì {
+                tiếp tục
+            }
+            in("{i} là số nguyên tố")
+        }
+
+        lặp i từ 1 đến 15 {
+            nếu i chia dư 15 bằng với 0 thì {
+                in("FizzBuzz")
+            } không thì nếu i chia dư 3 bằng với 0 thì {
+                in("Fizz")
+            } không thì nếu i chia dư 5 bằng với 0 thì {
+                in("Buzz")
+            } không thì {
+                in(i)
+            }
+        }
+    }
+}

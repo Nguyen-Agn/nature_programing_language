@@ -1,0 +1,20 @@
+{
+  "name": "Anature",
+  "scopeName": "source.anature",
+  "patterns": [
+    { "name": "comment.line.double-slash.anature", "match": "//.*$" },
+    {
+      "name": "string.quoted.double.anature",
+      "begin": "\"",
+      "end": "\"|$",
+      "patterns": [{ "name": "constant.character.escape.anature", "match": "\\\\." }]
+    },
+    {
+      "name": "string.quoted.single.anature",
+      "begin": "'",
+      "end": "'|$",
+      "patterns": [{ "name": "constant.character.escape.anature", "match": "\\\\." }]
+    },
+    { "name": "constant.numeric.anature", "match": "(?<![\\p{L}\\p{N}_])\\d+(\\.\\d+)?" }
+  ]
+}

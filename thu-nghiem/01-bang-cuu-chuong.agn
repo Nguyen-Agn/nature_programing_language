@@ -1,0 +1,23 @@
+// 01. Bảng cửu chương, đếm lùi, tính tổng.
+Lớp Bảng Cửu Chương {
+    Hàm gốc {
+        lặp i từ 2 đến 3 {
+            in("--- Bảng {i} ---")
+            lặp j từ 1 đến 3 {
+                in("{i} x {j} = {i nhân j}")
+            }
+        }
+
+        in("Đếm lùi:")
+        lặp k từ 3 đến 1 {
+            in(k)
+        }
+
+        đặt tổng là 0
+        lặp i từ 1 đến 100 {
+            tổng += i
+        }
+        in("Tổng 1..100 = {tổng}")
+        in("Trung bình = {tổng chia 100}")
+    }
+}

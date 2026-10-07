@@ -1,0 +1,50 @@
+{
+  "name": "anature",
+  "displayName": "Anature",
+  "description": "Gợi ý khi gõ, báo lỗi và tô màu cho ngôn ngữ Anature (.agn)",
+  "version": "0.1.0",
+  "publisher": "anature",
+  "engines": { "vscode": "^1.82.0" },
+  "categories": ["Programming Languages"],
+  "main": "./extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "anature",
+        "aliases": ["Anature"],
+        "extensions": [".agn"],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      { "language": "anature", "scopeName": "source.anature", "path": "./anature.tmLanguage.json" }
+    ],
+    "commands": [
+      { "command": "anature.run", "title": "Anature: Chạy tệp hiện tại", "icon": "$(play)" },
+      { "command": "anature.build", "title": "Anature: Sinh file Java" }
+    ],
+    "menus": {
+      "editor/title/run": [{ "command": "anature.run", "when": "editorLangId == anature" }]
+    },
+    "configuration": {
+      "title": "Anature",
+      "properties": {
+        "anature.serverPath": {
+          "type": "string",
+          "default": "anature",
+          "description": "Đường dẫn tới chương trình anature. Mặc định tìm trong PATH."
+        }
+      }
+    },
+    "configurationDefaults": {
+      "[anature]": {
+        "editor.semanticHighlighting.enabled": true,
+        "editor.wordBasedSuggestions": "off",
+        "editor.acceptSuggestionOnEnter": "off"
+      }
+    }
+  },
+  "dependencies": {
+    "vscode-languageclient": "^9.0.1"
+  }
+}

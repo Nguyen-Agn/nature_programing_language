@@ -1,0 +1,31 @@
+// 07. Trò chơi đoán số.
+Lớp Đoán Số {
+    Hàm gốc {
+        đặt bí mật là 7
+        đặt số lần là 0
+        đặt đã đoán đúng là sai
+
+        khi không phải đã đoán đúng {
+            in("Bạn đoán số mấy?")
+            đặt lần đoán là nhập số nguyên
+            số lần += 1
+
+            nếu lần đoán nhỏ hơn 1 hoặc lần đoán lớn hơn 10 thì {
+                in("Chỉ đoán từ 1 đến 10 thôi")
+                tiếp tục
+            }
+            nếu lần đoán bằng với bí mật thì {
+                đã đoán đúng là đúng
+            } không thì nếu lần đoán nhỏ hơn bí mật thì {
+                in("Lớn hơn nữa")
+            } không thì {
+                in("Nhỏ hơn nữa")
+            }
+            nếu số lần lớn hơn hoặc bằng 5 thì {
+                in("Hết lượt!")
+                dừng
+            }
+        }
+        in("Kết thúc sau {số lần} lần")
+    }
+}

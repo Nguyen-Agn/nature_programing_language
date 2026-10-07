@@ -1,0 +1,28 @@
+// 05. Xử lý chuỗi.
+Lớp Chuỗi Ký Tự {
+    Hàm gốc {
+        đặt tên là "Nguyễn Văn An"
+        in("Tên dài {độ dài của tên} ký tự")
+        in("Chữ đầu: {tên[0]}")
+
+        đặt chữ lời chào là "Xin chào, " cộng tên cộng "!"
+        in(lời chào)
+
+        đặt kí tự chữ cái là 'A'
+        nếu chữ cái bằng với 'A' thì {
+            in("Đúng là chữ A")
+        }
+
+        in("Dòng 1\nDòng 2\tcó tab và \"nháy kép\"")
+        in("Đường dẫn: http://vi-du.vn // không phải chú thích")
+        in("Tập hợp \{1, 2, 3\}")
+
+        đặt số là 42
+        đặt chữ số dạng chữ là "" cộng số
+        in("Ghép: {số dạng chữ cộng 1}")
+
+        nếu "an" nhỏ hơn "bình" thì {
+            in("an đứng trước bình")
+        }
+    }
+}

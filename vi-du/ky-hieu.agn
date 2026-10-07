@@ -1,0 +1,24 @@
+// Ví dụ: cùng ngôn ngữ, viết bằng ký hiệu thay cho chữ. Trộn hai cách cũng được.
+
+Lớp KýHiệu {
+    Hàm tổng(danh sách số nguyên ds) -> số nguyên {
+        đặt kết_quả = 0
+        với mỗi x : ds {
+            kết_quả += x
+        }
+        -> kết_quả
+    }
+
+    Hàm gốc {
+        đặt danh sách số nguyên bình_phương := []
+        lặp i = 1 .. 5 {
+            thêm i × i vào bình_phương
+        }
+        in("bình phương: " + bình_phương)
+
+        đặt t = tổng(bình_phương)
+        nếu t ≥ 50 && #bình_phương ≠ 0 {
+            in("tổng = " + t + ", trung bình = " + t ÷ #bình_phương)
+        }
+    }
+}

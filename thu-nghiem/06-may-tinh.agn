@@ -1,0 +1,30 @@
+// 06. Máy tính: nhập hai số và phép tính.
+Lớp Máy Tính {
+    Hàm gốc {
+        in("Nhập số thứ nhất:")
+        đặt a là nhập số thực
+        in("Nhập phép tính (+ - * /):")
+        đặt phép tính là nhập chữ
+        in("Nhập số thứ hai:")
+        đặt b là nhập số thực
+
+        nếu phép tính bằng với "+" thì {
+            in("{a} + {b} = {a cộng b}")
+        } không thì nếu phép tính bằng với "-" thì {
+            in("{a} - {b} = {a trừ b}")
+        } không thì nếu phép tính bằng với "*" thì {
+            in("{a} * {b} = {a nhân b}")
+        } không thì nếu phép tính bằng với "/" thì {
+            nếu b bằng với 0 thì {
+                in("Không chia được cho 0")
+            } không thì {
+                in("{a} / {b} = {a chia b}")
+            }
+        } không thì {
+            in("Không hiểu phép tính «{phép tính}»")
+        }
+
+        đặt âm là -a
+        in("Số đối của a: {âm}, a trừ âm một: {a trừ -1}")
+    }
+}

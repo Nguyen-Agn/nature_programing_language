@@ -1,0 +1,18 @@
+// Ví dụ: từ đệm đứng trước tên. Có tên theo sau thì là đệm; đứng một mình thì là tên.
+Lớp Lời Chào {
+    Hàm tổng(danh sách số nguyên tên ds) trả về số nguyên {
+        đặt số nguyên biến kết quả là 0
+        với mỗi x trong ds {
+            kết quả += x
+        }
+        trả về biến kết quả
+    }
+
+    Hàm gốc {
+        nhập chữ tên với lời nhắc "Bạn tên gì? "
+        nhập số nguyên cho biến tuổi với lời nhắc "Bao nhiêu tuổi? "
+        cho biến năm sau là biến tuổi cộng 1
+        in("Chào {tên}, năm sau bạn {năm sau} tuổi.")
+        in("Tổng: {tổng([tuổi, năm sau])}")
+    }
+}

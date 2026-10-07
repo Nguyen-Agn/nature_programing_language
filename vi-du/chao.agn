@@ -1,0 +1,18 @@
+// Ví dụ: đếm ngược rồi kiểm tra kết quả.
+Lớp Chao {
+    Hàm gốc {
+        đặt biến a là 5
+        đặt biến b bằng 2
+
+        Mỗi lúc giá trị a lớn hơn giá trị của b thì {
+            in ra màn hình( "a = " cộng a)
+            a là a trừ 1
+        }
+
+        Nếu a bằng với b thì {
+            in("Khi nào xong? Xong rồi!")
+        } không thì {
+            in( "chưa xong")
+        }
+    }
+}

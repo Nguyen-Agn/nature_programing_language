@@ -1,0 +1,20 @@
+// Ví dụ: ba cách lấy một phần tử của danh sách.
+Lớp Phần Tử {
+    Hàm gốc {
+        đặt biến điểm là [7, 9, 4]
+
+        in("Bằng ngoặc:  {điểm[0]}")
+        in("Bằng «thứ»:  {điểm thứ 1}")
+        in("Viết đầy đủ: {phần tử thứ 2 của điểm}")
+
+        điểm thứ 0 là 10
+        thành phần thứ 2 của điểm là 5
+        in("Sau khi sửa: {điểm}")
+
+        đặt tổng là 0
+        lặp i từ 0 đến độ dài của điểm trừ 1 {
+            tổng += phần tử thứ i của điểm
+        }
+        in("Tổng: {tổng}")
+    }
+}

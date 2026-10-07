@@ -1,0 +1,38 @@
+// Ví dụ: tên nhiều từ, chuỗi nội suy, dừng / tiếp tục, so sánh chữ.
+Lớp Điểm Số {
+    Hàm xếp loại(số thực điểm trung bình) trả về chữ {
+        nếu điểm trung bình lớn hơn hoặc bằng 8 thì {
+            trả về "giỏi"
+        }
+        nếu điểm trung bình lớn hơn hoặc bằng 6.5 thì {
+            trả về "khá"
+        }
+        trả về "trung bình"
+    }
+
+    Hàm gốc {
+        đặt biến các điểm là [9.0, 7.5, -1.0, 8.0, 100.0, 6.0]
+        đặt số thực tổng điểm là 0
+        đặt biến số môn là 0
+
+        với mỗi điểm trong các điểm {
+            nếu điểm nhỏ hơn 0 thì {
+                tiếp tục
+            }
+            nếu điểm lớn hơn 10 thì {
+                in("Gặp điểm {điểm} không hợp lệ, dừng lại.")
+                dừng
+            }
+            tổng điểm += điểm
+            số môn += 1
+        }
+
+        đặt biến điểm trung bình là tổng điểm chia số môn
+        đặt biến kết quả là xếp loại(điểm trung bình)
+        in("Trung bình {số môn} môn: {điểm trung bình}, xếp loại {kết quả}")
+
+        nếu kết quả bằng với "giỏi" thì {
+            in("Chúc mừng! Tên xếp loại dài {độ dài của kết quả} chữ.")
+        }
+    }
+}

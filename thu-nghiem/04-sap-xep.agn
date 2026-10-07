@@ -1,0 +1,32 @@
+// 04. Danh sách điểm: lớn nhất, nhỏ nhất, trung bình, sắp xếp nổi bọt.
+Lớp Sắp Xếp {
+    Hàm gốc {
+        đặt biến điểm là [7, 3, 9, 1, 5]
+
+        đặt lớn nhất là điểm[0]
+        đặt nhỏ nhất là điểm[0]
+        đặt tổng là 0
+        với mỗi x trong điểm {
+            nếu x lớn hơn lớn nhất thì { lớn nhất là x }
+            nếu x nhỏ hơn nhỏ nhất thì { nhỏ nhất là x }
+            tổng += x
+        }
+        in("Lớn nhất: {lớn nhất}, nhỏ nhất: {nhỏ nhất}")
+        in("Trung bình: {tổng chia độ dài của điểm}")
+
+        đặt n là độ dài của điểm
+        lặp i từ 0 đến n trừ 2 {
+            lặp j từ 0 đến n trừ 2 trừ i {
+                nếu điểm[j] lớn hơn điểm[j cộng 1] thì {
+                    đặt tạm là điểm[j]
+                    điểm[j] là điểm[j cộng 1]
+                    điểm[j cộng 1] là tạm
+                }
+            }
+        }
+        in("Đã sắp xếp: {điểm}")
+
+        điểm[0] += 100
+        in("Sau khi cộng: {điểm}")
+    }
+}

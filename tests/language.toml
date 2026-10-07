@@ -1,0 +1,696 @@
+# BẢN CỐ ĐỊNH CHO KIỂM THỬ. Bộ kiểm thử (cargo test) dùng file này, không dùng
+# language.toml ở thư mục gốc, để việc sửa từ vựng không làm kiểm thử đổi kết quả.
+# Khi lõi cần một mục cấu hình mới, cập nhật cả hai file.
+#
+# Cấu hình ngôn ngữ: toàn bộ từ vựng và luật ngữ pháp nằm ở đây.
+# Lõi (Rust) không chứa một từ tiếng Việt nào; sửa file này là đổi được ngôn ngữ.
+#
+# Quy ước chung:
+#   - Không phân biệt hoa/thường: "Khi" và "khi" là một.
+#   - Một cụm chỉ được thuộc MỘT nhóm (trừ từ đệm: một cụm có thể nằm trong nhiều nhóm đệm).
+#   - Cụm dài được ưu tiên khớp trước cụm ngắn ("lớn hơn hoặc bằng" trước "lớn hơn").
+#   - Mọi cụm khai báo ở đây đều là từ dành riêng, không dùng làm tên biến được.
+
+# ---------------------------------------------------------------------------
+# Từ khóa: token nội bộ = các cách viết
+# ---------------------------------------------------------------------------
+[keywords]
+CLASS  = ["lớp"]
+FUNC   = ["hàm", "phương thức"]
+MAIN   = ["gốc", "chính"]
+LET    = ["đặt biến", "tạo biến", "đặt", "cho biến"]
+ASSIGN = ["là", "bằng", "có giá trị", "=", ":=", "tương đương"]   # từ ngăn cách: kết thúc tên biến
+WHILE  = ["khi", "mỗi lúc", "mỗi khi", "trong khi"]
+IF     = ["nếu", "nếu như"]
+ELSE   = ["không thì", "ngược lại", "trái lại"]
+PRINT  = ["in", "in ra", "xuất"]
+PRINT_INLINE = ["in liền", "viết liền", "in 1 dòng", " in dòng"]   # in mà không xuống dòng
+RETURN = ["trả về", "trả lại", "->", "→"]
+FOR    = ["lặp", "cho"]
+FROM   = ["từ"]
+TO     = ["đến", "tới", ".."]
+DOWN_TO = ["lùi về", "lùi đến", "giảm đến"]
+EACH   = ["với mỗi", "mỗi phần tử", "mỗi", "mỗi cái"]
+IN     = ["trong", "thuộc", ":", "thuộc về"]
+LIST   = ["danh sách", "mảng", "tập hợp"]
+APPEND = ["thêm", "nạp", "đưa"]
+INTO   = ["vào"]
+REMOVE = ["xóa","loại bỏ"]
+OUT_OF = ["khỏi"]
+AT     = ["thành phần thứ", "vị trí", "phần tử thứ", "phần tử ở vị trí"]
+NTH    = ["thứ"]   # sau một danh sách: "ds thứ 0" là ds[0]
+SORT   = ["sắp xếp lại", "xếp lại"]   # không dùng "sắp xếp" trơn, để còn đặt tên hàm sắp xếp
+INPUT  = ["nhập", "nhập từ"]
+PROMPT = ["với lời nhắc", "kèm lời nhắc"]
+BREAK    = ["dừng", "dừng lặp", "thoát", "thoát lặp"]
+CONTINUE = ["tiếp tục", "bỏ qua","tiếp theo"]
+# Gán kèm phép tính: chỉ có dạng ký hiệu.
+ADD_ASSIGN = ["+=","tăng thêm","tăng"]
+SUB_ASSIGN = ["-=", "giảm đi","giảm"]
+MUL_ASSIGN = ["*=", "×=", "tích thêm"]
+DIV_ASSIGN = ["/=", "÷=" ,"chia bởi"]
+
+# Kiểu dữ liệu, dùng khi khai báo tham số, kiểu trả về, hoặc biến có kiểu tường minh.
+[types]
+INT    = ["số nguyên"]
+LONG   = ["số nguyên lớn"]
+DOUBLE = ["số thực"]
+STRING = ["chữ", "chuỗi", "văn bản"]
+CHAR   = ["kí tự", "ký tự"]
+BOOL   = ["luận lý", "đúng sai"]
+
+# Hằng giá trị, dùng được trong biểu thức.
+[literals]
+TRUE  = ["đúng","chính xác", "bật"]
+FALSE = ["sai","tắt"]
+
+# ---------------------------------------------------------------------------
+# Toán tử: prec càng lớn càng ưu tiên. prefix = đứng trước toán hạng được.
+# ---------------------------------------------------------------------------
+[operators]
+OR  = { words = ["hoặc", "hay", "||"], prec = 1 }
+AND = { words = ["và", "&&", "đồng thời"], prec = 2 }
+EQ  = { words = ["bằng với", "giống","tương đương", "=="], prec = 3 }
+NE  = { words = ["khác", "khác với","không giống", "!=", "≠"], prec = 3 }
+GT  = { words = ["lớn hơn", "trên", ">"], prec = 4 }
+LT  = { words = ["nhỏ hơn", "dưới", "<"], prec = 4 }
+GE  = { words = ["lớn hơn hoặc bằng","không nhỏ hơn", ">=", "≥"], prec = 4 }
+LE  = { words = ["nhỏ hơn hoặc bằng", "không lớn hơn", "<=", "≤"], prec = 4 }
+ADD = { words = ["cộng", "+"], prec = 5 }   # "thêm" cũng là phép cộng khi đứng giữa biểu thức: xem keyword_operators
+SUB = { words = ["trừ", "-" , "bớt"], prec = 5, prefix = true }
+MUL = { words = ["nhân", "*", "×"], prec = 6 }
+DIV = { words = ["chia", "/", "÷"], prec = 6 }
+MOD = { words = ["chia dư", "%", "phần dư"], prec = 6 }
+# prefix_prec: phủ định ôm cả phép so sánh đứng sau nó ("không phải a nhỏ hơn b"),
+# nhưng dừng trước "và" / "hoặc".
+NOT = { words = ["không phải","không", "!"], prec = 7, prefix = true, infix = false, prefix_prec = 3 }
+LEN = { words = ["độ dài", "số phần tử", "kích thước", "#"], prec = 7, prefix = true, infix = false }
+# Chỉ có dạng ký hiệu: "mũ" và "lũy thừa" quá hay gặp trong tên (số mũ, hàm lũy thừa).
+POW  = { words = ["^", "**", "mũ"], prec = 8 }
+SQRT = { words = ["căn bậc hai"], prec = 7, prefix = true, infix = false }
+ABS  = { words = ["trị tuyệt đối", "giá trị tuyệt đối"], prec = 7, prefix = true, infix = false }
+DIVISIBLE = { words = ["chia hết cho"], prec = 4 }
+CONTAINS  = { words = ["chứa", "có chứa", "bao gồm"], prec = 4 }
+
+# ---------------------------------------------------------------------------
+# Từ đệm: mỗi nhóm chỉ có hiệu lực tại vị trí mà luật nhắc tới nó.
+# ---------------------------------------------------------------------------
+[fillers]
+TOAN_HANG = ["giá trị", "giá trị của", "của"]   # trước một toán hạng trong biểu thức
+THI       = ["thì"]                             # sau điều kiện
+SAU_IN    = ["màn hình"]                        # sau lệnh in
+# Trước một cái tên: "nhập số nguyên cho biến tuổi", "danh sách số nguyên tên ds".
+# Các từ này chỉ là đệm khi có tên theo sau; đứng một mình thì chính nó là tên, nên
+# biến tên «tên» vẫn dùng được: "nhập chữ tên".
+TRUOC_TEN = ["tên", "biến", "biến tên", "cho biến", "cho biến tên"]
+# Giữa tên hàm và dấu ( của tham số: "Hàm tổng với tham số (số nguyên a, số nguyên b)".
+TRUOC_THAM_SO = ["với tham gia", "với tham số"]
+
+[expression]
+operand_fillers = "TOAN_HANG"
+name_fillers    = "TRUOC_TEN"
+# Từ gán đứng giữa một biểu thức thì mang nghĩa so sánh bằng: "nếu a bằng b", "nếu a là 3".
+# Tương tự, "thêm" mở đầu câu là lệnh thêm vào danh sách, còn giữa biểu thức là phép cộng: "a thêm 1".
+keyword_operators = { ASSIGN = "EQ", APPEND = "ADD" }
+
+# Các cụm tương đương dấu phẩy trong danh sách tham số: tổng(2 và 3) = tổng(2, 3).
+# Chỉ có hiệu lực ngay trong ngoặc của hàm; muốn phép "và" ở đó thì bọc thêm ngoặc
+# hoặc viết &&: kiểm((a và b)), kiểm(a && b).
+# ---------------------------------------------------------------------------
+# Kiểm tra ngữ nghĩa: lõi cần biết tên của vài kiểu và toán tử để suy ra kiểu của
+# biểu thức. Bỏ cả mục này đi thì lõi không kiểm tra tên và kiểu nữa.
+# ---------------------------------------------------------------------------
+[semantics]
+integer   = "INT"       # kiểu của 42
+decimal   = "DOUBLE"    # kiểu của 4.2
+text      = "STRING"    # kiểu của "chữ"
+character = "CHAR"      # kiểu của 'c'
+boolean   = "BOOL"      # kiểu của đúng / sai
+numeric   = ["INT", "LONG", "DOUBLE"]   # hẹp đến rộng: kiểu trước gán được vào kiểu sau
+big_integer = "LONG"    # kiểu của số nguyên quá lớn so với INT, như 8000000000
+entry_rule  = "MAIN"    # chương trình phải có luật này mới chạy được
+
+[semantics.operators]
+boolean    = ["OR", "AND", "EQ", "NE", "GT", "LT", "GE", "LE", "NOT", "DIVISIBLE", "CONTAINS"]
+compares   = ["EQ", "NE", "GT", "LT", "GE", "LE"]   # hai vế phải cùng loại kiểu
+integer    = ["LEN"]
+decimal    = ["POW", "SQRT"]
+joins_text = ["ADD"]    # một vế là chữ thì kết quả là chữ
+
+[lists]
+index_keyword = "NTH"   # "ds thứ i" lấy phần tử ở vị trí i
+# Các nhóm được phép chen giữa tên hàm và dấu (, cả khi khai báo lẫn khi gọi:
+#   Hàm tổng từ (số nguyên a, số nguyên b)      tổng từ (2, 3)
+before_arguments = ["FROM", "TRUOC_THAM_SO"]
+separators = ["và"]
+type_keyword = "LIST"   # "danh sách số nguyên" là kiểu danh sách của số nguyên
+
+# ---------------------------------------------------------------------------
+# Luật ngữ pháp. Thứ tự trong file là thứ tự thử (PEG): luật khớp trước thắng.
+#
+#   (NHÓM)        bắt buộc một từ khóa (hoặc một kiểu) thuộc nhóm
+#   [ ] ( ) { } , một ký hiệu viết nguyên văn, đứng riêng một mình
+#   [NHÓM]?       có hoặc không (nhóm từ khóa hoặc nhóm đệm)
+#   [NHÓM]*       không hoặc nhiều
+#   <tên:loại>    chỗ trống; loại là:
+#                   tên        một tên biến/hàm/lớp
+#                   biểu_thức  một biểu thức
+#                   toán_hạng  một toán hạng đơn (không kèm phép toán phía sau)
+#                   kiểu       một kiểu trong [types]
+#                   tham_số    (kiểu tên, kiểu tên, ...) — bỏ cả ngoặc nếu không có tham số
+#                   lời_gọi    tên(đối số, ...)
+#                   khối       { các lệnh scope "thân" }
+#                   khối_lớp   { các lệnh scope "lớp" }
+#                   lệnh       một lệnh scope "thân"
+#
+# Phần ngữ nghĩa của luật (tùy chọn), mỗi giá trị là tên một chỗ trống của luật:
+#   declare  = { name, type?, value?, element_of? }   khai báo một biến
+#   function = { name?, params?, returns? }           định nghĩa hàm, thân là phạm vi riêng
+#   assign   = { name, value }                        gán cho biến đã có
+#   defines  = [..]                                   chỗ đặt tên mới, không phải dùng biến
+#   gives    = ".."                                   giá trị trả về cho hàm
+#   result   = "KIỂU"                                 kiểu của một luật scope biểu_thức
+#   ascending = { from, to, hint }                    hai mốc của một vòng đếm lên; báo lỗi
+#                                                     khi cả hai là số và mốc đầu lớn hơn mốc cuối
+#
+# scope: "tệp" (ngoài cùng) | "lớp" (trong khối_lớp) | "thân" (trong khối)
+#        | "biểu_thức" (dùng như một giá trị; phải mở đầu bằng một (TỪ_KHÓA))
+# ---------------------------------------------------------------------------
+[[rules]]
+name    = "CLASS"
+scope   = "tệp"
+pattern = "(CLASS) <tên:tên> <thân:khối_lớp>"
+defines = ["tên"]
+
+[[rules]]
+name    = "MAIN"
+scope   = "lớp"
+pattern = "(FUNC) (MAIN) <thân:khối>"
+function = {}
+
+[[rules]]
+name    = "FUNC_RETURNS"
+scope   = "lớp"
+pattern = "(FUNC) <tên:tên> <tham_số:tham_số> (RETURN) <kiểu:kiểu> <thân:khối>"
+function = { name = "tên", params = "tham_số", returns = "kiểu" }
+
+[[rules]]
+name    = "FUNC"
+scope   = "lớp"
+pattern = "(FUNC) <tên:tên> <tham_số:tham_số> <thân:khối>"
+function = { name = "tên", params = "tham_số" }
+
+# Biến dùng chung cho mọi hàm trong lớp. Phải khai kiểu.
+[[rules]]
+name    = "FIELD"
+scope   = "lớp"
+pattern = "(LET) <kiểu:kiểu> <tên:tên> (ASSIGN) <giá_trị:biểu_thức>"
+declare = { name = "tên", type = "kiểu", value = "giá_trị" }
+
+[[rules]]
+name    = "LET_TYPED"
+scope   = "thân"
+pattern = "(LET) <kiểu:kiểu> <tên:tên> (ASSIGN) <giá_trị:biểu_thức>"
+declare = { name = "tên", type = "kiểu", value = "giá_trị" }
+
+[[rules]]
+name    = "LET"
+scope   = "thân"
+pattern = "(LET) <tên:tên> (ASSIGN) <giá_trị:biểu_thức>"
+declare = { name = "tên", value = "giá_trị" }
+
+[[rules]]
+name    = "WHILE"
+scope   = "thân"
+pattern = "(WHILE) <điều_kiện:biểu_thức> [THI]? <thân:khối>"
+
+[[rules]]
+name    = "FOR_RANGE"
+scope   = "thân"
+pattern = "(FOR) <biến:tên> (FROM) <đầu:biểu_thức> (TO) <cuối:biểu_thức> <thân:khối>"
+declare = { name = "biến", value = "đầu" }
+ascending = { from = "đầu", to = "cuối", hint = "muốn đếm lùi hãy viết «lùi về» thay cho «đến»" }
+
+# Đếm lùi: lặp k từ 3 lùi về 1
+[[rules]]
+name    = "FOR_DOWN"
+scope   = "thân"
+pattern = "(FOR) <biến:tên> (FROM) <đầu:biểu_thức> (DOWN_TO) <cuối:biểu_thức> <thân:khối>"
+declare = { name = "biến", value = "đầu" }
+
+[[rules]]
+name    = "FOR_DOWN_ASSIGN"
+scope   = "thân"
+pattern = "(FOR) <biến:tên> (ASSIGN) <đầu:biểu_thức> (DOWN_TO) <cuối:biểu_thức> <thân:khối>"
+declare = { name = "biến", value = "đầu" }
+
+# Dạng ký hiệu: lặp i = 1 .. 10
+[[rules]]
+name    = "FOR_RANGE_ASSIGN"
+scope   = "thân"
+pattern = "(FOR) <biến:tên> (ASSIGN) <đầu:biểu_thức> (TO) <cuối:biểu_thức> <thân:khối>"
+declare = { name = "biến", value = "đầu" }
+ascending = { from = "đầu", to = "cuối", hint = "muốn đếm lùi hãy viết «lùi về» thay cho «..»" }
+
+[[rules]]
+name    = "FOR_EACH"
+scope   = "thân"
+pattern = "(EACH) <biến:tên> (IN) <danh_sách:biểu_thức> <thân:khối>"
+declare = { name = "biến", element_of = "danh_sách" }
+
+[[rules]]
+name    = "IF_ELSE"
+scope   = "thân"
+pattern = "(IF) <điều_kiện:biểu_thức> [THI]? <thân:khối> (ELSE) <khác:khối>"
+
+[[rules]]
+name    = "IF_ELSE_IF"
+scope   = "thân"
+pattern = "(IF) <điều_kiện:biểu_thức> [THI]? <thân:khối> (ELSE) <khác:lệnh>"
+
+[[rules]]
+name    = "IF"
+scope   = "thân"
+pattern = "(IF) <điều_kiện:biểu_thức> [THI]? <thân:khối>"
+
+[[rules]]
+name    = "PRINT_EMPTY"
+scope   = "thân"
+pattern = "(PRINT) ( )"
+
+[[rules]]
+name    = "PRINT_INLINE"
+scope   = "thân"
+pattern = "(PRINT_INLINE) <giá_trị:biểu_thức>"
+
+[[rules]]
+name    = "PRINT"
+scope   = "thân"
+pattern = "(PRINT) [SAU_IN]* <giá_trị:biểu_thức>"
+
+[[rules]]
+name    = "RETURN_VALUE"
+scope   = "thân"
+pattern = "(RETURN) <giá_trị:biểu_thức>"
+gives   = "giá_trị"
+
+[[rules]]
+name    = "RETURN"
+scope   = "thân"
+pattern = "(RETURN)"
+
+[[rules]]
+name    = "BREAK"
+scope   = "thân"
+pattern = "(BREAK)"
+
+[[rules]]
+name    = "CONTINUE"
+scope   = "thân"
+pattern = "(CONTINUE)"
+
+# Nhập thẳng vào một biến mới, không cần "đặt ... là nhập ...":
+#   nhập số nguyên tuổi
+#   nhập chữ tên với lời nhắc "Bạn tên gì? "
+#   nhập tên                      (không ghi kiểu thì là chữ)
+[[rules]]
+name    = "READ_INT_PROMPT"
+scope   = "thân"
+pattern = "(INPUT) (INT) <tên:tên> (PROMPT) <lời_nhắc:biểu_thức>"
+declare = { name = "tên", is = "INT" }
+
+[[rules]]
+name    = "READ_INT"
+scope   = "thân"
+pattern = "(INPUT) (INT) <tên:tên>"
+declare = { name = "tên", is = "INT" }
+
+[[rules]]
+name    = "READ_LONG_PROMPT"
+scope   = "thân"
+pattern = "(INPUT) (LONG) <tên:tên> (PROMPT) <lời_nhắc:biểu_thức>"
+declare = { name = "tên", is = "LONG" }
+
+[[rules]]
+name    = "READ_LONG"
+scope   = "thân"
+pattern = "(INPUT) (LONG) <tên:tên>"
+declare = { name = "tên", is = "LONG" }
+
+[[rules]]
+name    = "READ_DOUBLE_PROMPT"
+scope   = "thân"
+pattern = "(INPUT) (DOUBLE) <tên:tên> (PROMPT) <lời_nhắc:biểu_thức>"
+declare = { name = "tên", is = "DOUBLE" }
+
+[[rules]]
+name    = "READ_DOUBLE"
+scope   = "thân"
+pattern = "(INPUT) (DOUBLE) <tên:tên>"
+declare = { name = "tên", is = "DOUBLE" }
+
+[[rules]]
+name    = "READ_BOOL_PROMPT"
+scope   = "thân"
+pattern = "(INPUT) (BOOL) <tên:tên> (PROMPT) <lời_nhắc:biểu_thức>"
+declare = { name = "tên", is = "BOOL" }
+
+[[rules]]
+name    = "READ_BOOL"
+scope   = "thân"
+pattern = "(INPUT) (BOOL) <tên:tên>"
+declare = { name = "tên", is = "BOOL" }
+
+[[rules]]
+name    = "READ_STRING_PROMPT"
+scope   = "thân"
+pattern = "(INPUT) (STRING) <tên:tên> (PROMPT) <lời_nhắc:biểu_thức>"
+declare = { name = "tên", is = "STRING" }
+
+[[rules]]
+name    = "READ_STRING"
+scope   = "thân"
+pattern = "(INPUT) (STRING) <tên:tên>"
+declare = { name = "tên", is = "STRING" }
+
+[[rules]]
+name    = "READ_PROMPT"
+scope   = "thân"
+pattern = "(INPUT) <tên:tên> (PROMPT) <lời_nhắc:biểu_thức>"
+declare = { name = "tên", is = "STRING" }
+
+[[rules]]
+name    = "READ"
+scope   = "thân"
+pattern = "(INPUT) <tên:tên>"
+declare = { name = "tên", is = "STRING" }
+
+[[rules]]
+name    = "APPEND"
+scope   = "thân"
+pattern = "(APPEND) <giá_trị:biểu_thức> (INTO) <danh_sách:biểu_thức>"
+
+# "xóa vị trí 0 khỏi ds" xóa theo vị trí; "xóa 20 khỏi ds" xóa phần tử có giá trị 20.
+[[rules]]
+name    = "REMOVE_AT"
+scope   = "thân"
+pattern = "(REMOVE) (AT) <vị_trí:biểu_thức> (OUT_OF) <danh_sách:biểu_thức>"
+
+[[rules]]
+name    = "REMOVE_VALUE"
+scope   = "thân"
+pattern = "(REMOVE) <giá_trị:biểu_thức> (OUT_OF) <danh_sách:biểu_thức>"
+
+[[rules]]
+name    = "SORT"
+scope   = "thân"
+pattern = "(SORT) <danh_sách:biểu_thức>"
+
+# Phần tử của danh sách lồng: bảng[i][j] là x
+[[rules]]
+name    = "SET_INDEX_2"
+scope   = "thân"
+pattern = "<danh_sách:tên> [ <hàng:biểu_thức> ] [ <cột:biểu_thức> ] (ASSIGN) <giá_trị:biểu_thức>"
+
+[[rules]]
+name    = "ADD_ASSIGN_INDEX"
+scope   = "thân"
+pattern = "<danh_sách:tên> [ <vị_trí:biểu_thức> ] (ADD_ASSIGN) <giá_trị:biểu_thức>"
+
+[[rules]]
+name    = "SUB_ASSIGN_INDEX"
+scope   = "thân"
+pattern = "<danh_sách:tên> [ <vị_trí:biểu_thức> ] (SUB_ASSIGN) <giá_trị:biểu_thức>"
+
+[[rules]]
+name    = "MUL_ASSIGN_INDEX"
+scope   = "thân"
+pattern = "<danh_sách:tên> [ <vị_trí:biểu_thức> ] (MUL_ASSIGN) <giá_trị:biểu_thức>"
+
+[[rules]]
+name    = "DIV_ASSIGN_INDEX"
+scope   = "thân"
+pattern = "<danh_sách:tên> [ <vị_trí:biểu_thức> ] (DIV_ASSIGN) <giá_trị:biểu_thức>"
+
+# Hai cách viết bằng chữ của ds[i] là giá_trị:
+#   ds thứ 0 là 5
+#   phần tử thứ 0 của ds là 5
+[[rules]]
+name    = "SET_NTH"
+scope   = "thân"
+pattern = "<danh_sách:tên> (NTH) <vị_trí:toán_hạng> (ASSIGN) <giá_trị:biểu_thức>"
+
+[[rules]]
+name    = "SET_ELEMENT"
+scope   = "thân"
+pattern = "(AT) <vị_trí:toán_hạng> [TOAN_HANG]* <danh_sách:tên> (ASSIGN) <giá_trị:biểu_thức>"
+
+[[rules]]
+name    = "SET_INDEX"
+scope   = "thân"
+pattern = "<danh_sách:tên> [ <vị_trí:biểu_thức> ] (ASSIGN) <giá_trị:biểu_thức>"
+
+[[rules]]
+name    = "CALL"
+scope   = "thân"
+pattern = "<gọi:lời_gọi>"
+
+[[rules]]
+name    = "ADD_ASSIGN"
+scope   = "thân"
+pattern = "<tên:tên> (ADD_ASSIGN) <giá_trị:biểu_thức>"
+
+[[rules]]
+name    = "SUB_ASSIGN"
+scope   = "thân"
+pattern = "<tên:tên> (SUB_ASSIGN) <giá_trị:biểu_thức>"
+
+[[rules]]
+name    = "MUL_ASSIGN"
+scope   = "thân"
+pattern = "<tên:tên> (MUL_ASSIGN) <giá_trị:biểu_thức>"
+
+[[rules]]
+name    = "DIV_ASSIGN"
+scope   = "thân"
+pattern = "<tên:tên> (DIV_ASSIGN) <giá_trị:biểu_thức>"
+
+[[rules]]
+name    = "SET"
+scope   = "thân"
+pattern = "<tên:tên> (ASSIGN) <giá_trị:biểu_thức>"
+assign  = { name = "tên", value = "giá_trị" }
+
+# Nhập từ bàn phím, mỗi lần đọc một dòng. "nhập" không kèm kiểu thì ra chữ.
+# "phần tử thứ i của ds" là một cách viết khác của ds[i].
+[[rules]]
+name    = "ELEMENT"
+scope   = "biểu_thức"
+pattern = "(AT) <vị_trí:toán_hạng> <danh_sách:toán_hạng>"
+index   = { of = "danh_sách", at = "vị_trí" }
+
+[[rules]]
+name    = "INPUT_INT"
+scope   = "biểu_thức"
+pattern = "(INPUT) (INT)"
+result  = "INT"
+
+[[rules]]
+name    = "INPUT_LONG"
+scope   = "biểu_thức"
+pattern = "(INPUT) (LONG)"
+result  = "LONG"
+
+[[rules]]
+name    = "INPUT_DOUBLE"
+scope   = "biểu_thức"
+pattern = "(INPUT) (DOUBLE)"
+result  = "DOUBLE"
+
+[[rules]]
+name    = "INPUT_BOOL"
+scope   = "biểu_thức"
+pattern = "(INPUT) (BOOL)"
+result  = "BOOL"
+
+[[rules]]
+name    = "INPUT_STRING"
+scope   = "biểu_thức"
+pattern = "(INPUT) [STRING]?"
+result  = "STRING"
+
+# ---------------------------------------------------------------------------
+# Bảng ánh xạ cuối: token nội bộ -> Java. Đổi ngôn ngữ đích chỉ cần thay phần này.
+# Trong mẫu, {tên_chỗ_trống} được thay bằng mã đã sinh của chỗ trống đó.
+# Toán tử thường chỉ là một ký hiệu; nếu cần hình dạng khác thì viết mẫu với {a} và {b}.
+# ---------------------------------------------------------------------------
+[java]
+class_rule = "CLASS"   # luật và chỗ trống cho biết tên file .java
+class_slot = "tên"
+header = "import java.util.*;"
+long_suffix = "L"      # 8000000000 thành 8000000000L
+concat = "{a} + {b}"   # nối hai mảnh của một chuỗi nội suy "... {x} ..."
+# Đặt sau lớp chính: đồ dùng chung cho mã sinh ra.
+footer = "class Anature { static final Scanner NHAP = new Scanner(System.in); }"
+# Tên mà chương trình của người dùng không được chiếm (sẽ tự gắn số nếu trùng).
+reserved = ["Anature", "ArrayList", "List", "Scanner", "Objects", "Collections", "Integer", "Long", "Double", "Character", "Boolean", "Math"]
+
+[java.rules]
+CLASS      = "public class {tên} {thân}"
+MAIN       = "public static void main(String[] args) {thân}"
+FUNC_RETURNS = "static {kiểu} {tên}({tham_số}) {thân}"
+FUNC         = "static void {tên}({tham_số}) {thân}"
+LET_TYPED    = "{kiểu} {tên} = {giá_trị};"
+RETURN_VALUE = "return {giá_trị};"
+RETURN       = "return;"
+CALL         = "{gọi};"
+ELEMENT      = "{danh_sách}.get({vị_trí})"
+SET_NTH      = "{danh_sách}.set({vị_trí}, {giá_trị});"
+SET_ELEMENT  = "{danh_sách}.set({vị_trí}, {giá_trị});"
+READ_INT_PROMPT = "System.out.print({lời_nhắc}); int {tên} = Integer.parseInt(Anature.NHAP.nextLine().trim());"
+READ_INT = "int {tên} = Integer.parseInt(Anature.NHAP.nextLine().trim());"
+READ_LONG_PROMPT = "System.out.print({lời_nhắc}); long {tên} = Long.parseLong(Anature.NHAP.nextLine().trim());"
+READ_LONG = "long {tên} = Long.parseLong(Anature.NHAP.nextLine().trim());"
+READ_DOUBLE_PROMPT = "System.out.print({lời_nhắc}); double {tên} = Double.parseDouble(Anature.NHAP.nextLine().trim());"
+READ_DOUBLE = "double {tên} = Double.parseDouble(Anature.NHAP.nextLine().trim());"
+READ_BOOL_PROMPT = "System.out.print({lời_nhắc}); boolean {tên} = Boolean.parseBoolean(Anature.NHAP.nextLine().trim());"
+READ_BOOL = "boolean {tên} = Boolean.parseBoolean(Anature.NHAP.nextLine().trim());"
+READ_STRING_PROMPT = "System.out.print({lời_nhắc}); String {tên} = Anature.NHAP.nextLine();"
+READ_STRING = "String {tên} = Anature.NHAP.nextLine();"
+READ_PROMPT = "System.out.print({lời_nhắc}); String {tên} = Anature.NHAP.nextLine();"
+READ = "String {tên} = Anature.NHAP.nextLine();"
+BREAK        = "break;"
+CONTINUE     = "continue;"
+# "đến" chỉ đếm lên: "từ 2 đến n chia 2" phải không chạy lần nào khi n nhỏ. Đếm lùi viết "lùi về".
+FOR_RANGE    = "for (var {biến} = {đầu}; {biến} <= {cuối}; {biến}++) {thân}"
+FOR_DOWN     = "for (var {biến} = {đầu}; {biến} >= {cuối}; {biến}--) {thân}"
+FOR_DOWN_ASSIGN = "for (var {biến} = {đầu}; {biến} >= {cuối}; {biến}--) {thân}"
+FOR_EACH     = "for (var {biến} : {danh_sách}) {thân}"
+FOR_RANGE_ASSIGN = "for (var {biến} = {đầu}; {biến} <= {cuối}; {biến}++) {thân}"
+ADD_ASSIGN   = "{tên} += {giá_trị};"
+SUB_ASSIGN   = "{tên} -= {giá_trị};"
+MUL_ASSIGN   = "{tên} *= {giá_trị};"
+DIV_ASSIGN   = "{tên} /= {giá_trị};"
+APPEND       = "{danh_sách}.add({giá_trị});"
+REMOVE_AT    = "{danh_sách}.remove((int) ({vị_trí}));"
+REMOVE_VALUE = "{danh_sách}.remove((Object) ({giá_trị}));"
+SORT         = "Collections.sort({danh_sách});"
+SET_INDEX_2  = "{danh_sách}.get({hàng}).set({cột}, {giá_trị});"
+ADD_ASSIGN_INDEX = "{danh_sách}.set({vị_trí}, {danh_sách}.get({vị_trí}) + ({giá_trị}));"
+SUB_ASSIGN_INDEX = "{danh_sách}.set({vị_trí}, {danh_sách}.get({vị_trí}) - ({giá_trị}));"
+MUL_ASSIGN_INDEX = "{danh_sách}.set({vị_trí}, {danh_sách}.get({vị_trí}) * ({giá_trị}));"
+DIV_ASSIGN_INDEX = "{danh_sách}.set({vị_trí}, {danh_sách}.get({vị_trí}) / ({giá_trị}));"
+FIELD        = "static {kiểu} {tên} = {giá_trị};"
+PRINT_EMPTY  = "System.out.println();"
+PRINT_INLINE = "System.out.print({giá_trị});"
+SET_INDEX    = "{danh_sách}.set({vị_trí}, {giá_trị});"
+INPUT_INT    = "Integer.parseInt(Anature.NHAP.nextLine().trim())"
+INPUT_LONG   = "Long.parseLong(Anature.NHAP.nextLine().trim())"
+INPUT_DOUBLE = "Double.parseDouble(Anature.NHAP.nextLine().trim())"
+INPUT_BOOL   = "Boolean.parseBoolean(Anature.NHAP.nextLine().trim())"
+INPUT_STRING = "Anature.NHAP.nextLine()"
+LET        = "var {tên} = {giá_trị};"
+WHILE      = "while ({điều_kiện}) {thân}"
+IF_ELSE    = "if ({điều_kiện}) {thân} else {khác}"
+IF_ELSE_IF = "if ({điều_kiện}) {thân} else {khác}"
+IF         = "if ({điều_kiện}) {thân}"
+PRINT      = "System.out.println({giá_trị});"
+SET        = "{tên} = {giá_trị};"
+
+[java.operators]
+OR  = "||"
+AND = "&&"
+EQ  = "=="
+NE  = "!="
+GT  = ">"
+LT  = "<"
+GE  = ">="
+LE  = "<="
+ADD = "+"
+SUB = "-"
+MUL = "*"
+DIV = "/"
+MOD = "%"
+NOT = "!"
+LEN = "{a}.size()"
+# Biến thể theo kiểu của toán hạng, viết TOÁN_TỬ.KIỂU. Trong Java, == trên chữ so
+# sánh địa chỉ chứ không so nội dung, và độ dài của chữ không phải .size().
+"EQ.STRING"  = "Objects.equals({a}, {b})"
+"NE.STRING"  = "!Objects.equals({a}, {b})"
+"LEN.STRING" = "{a}.length()"
+"LT.STRING"  = "{a}.compareTo({b}) < 0"
+"GT.STRING"  = "{a}.compareTo({b}) > 0"
+"LE.STRING"  = "{a}.compareTo({b}) <= 0"
+"GE.STRING"  = "{a}.compareTo({b}) >= 0"
+"INDEX.STRING" = "{a}.charAt({b})"      # tên[0]: một kí tự của chữ
+# Hai danh sách bằng nhau khi các phần tử bằng nhau.
+"EQ.LIST"    = "Objects.equals({a}, {b})"
+"NE.LIST"    = "!Objects.equals({a}, {b})"
+# Hai số cùng lấy ra từ danh sách: Java so địa chỉ của hai "hộp" chứ không so giá
+# trị. Dấu + một ngôi buộc nó mở hộp.
+"EQ.BOXED"   = "(+{a}) == (+{b})"
+"NE.BOXED"   = "(+{a}) != (+{b})"
+# Số nguyên tràn thì dừng chương trình và báo, thay vì lặng lẽ ra số sai.
+"ADD.INT"    = "Math.addExact({a}, {b})"
+"SUB.INT"    = "Math.subtractExact({a}, {b})"
+"MUL.INT"    = "Math.multiplyExact({a}, {b})"
+"ADD.LONG"   = "Math.addExact({a}, {b})"
+"SUB.LONG"   = "Math.subtractExact({a}, {b})"
+"MUL.LONG"   = "Math.multiplyExact({a}, {b})"
+POW  = "Math.pow({a}, {b})"
+SQRT = "Math.sqrt({a})"
+ABS  = "Math.abs({a})"
+DIVISIBLE = "{a} % {b} == 0"
+CONTAINS  = "{a}.contains({b})"
+
+[java.literals]
+TRUE  = "true"
+FALSE = "false"
+
+[java.types]
+INT    = "int"
+LONG   = "long"
+DOUBLE = "double"
+STRING = "String"
+CHAR   = "char"
+BOOL   = "boolean"
+
+# Kiểu khi nằm trong danh sách (Java không cho ArrayList<int>).
+[java.boxed]
+INT    = "Integer"
+LONG   = "Long"
+DOUBLE = "Double"
+CHAR   = "Character"
+BOOL   = "Boolean"
+
+[java.lists]
+type    = "ArrayList<{kiểu}>"
+literal = "new ArrayList<>(List.of({phần_tử}))"
+index   = "{danh_sách}.get({vị_trí})"
+
+# Câu tiếng Việt cho các thông báo quen thuộc của Java. Khóa là một đoạn có trong
+# thông báo gốc; bản gốc vẫn được in kèm trong ngoặc.
+[java.messages]
+"cannot find symbol"               = "tên chưa được khai báo hoặc viết sai"
+"incompatible types"               = "sai kiểu dữ liệu"
+"missing return statement"         = "hàm thiếu lệnh trả về"
+"is already defined"               = "tên đã được khai báo trước đó"
+"cannot be applied to given types" = "gọi hàm sai số lượng hoặc sai kiểu đối số"
+"might not have been initialized"  = "biến chưa có giá trị"
+"unreachable statement"            = "lệnh này không bao giờ chạy tới"
+"bad operand types"                = "toán tử không dùng được với kiểu dữ liệu này"
+"cannot infer type"                = "không suy ra được kiểu; hãy khai kiểu tường minh"
+"/ by zero"                        = "chia cho 0"
+"integer overflow"                 = "tràn số: kết quả vượt quá giới hạn của số nguyên; hãy dùng số nguyên lớn"
+"long overflow"                    = "tràn số: kết quả vượt quá giới hạn của số nguyên lớn"
+"break outside switch or loop"     = "lệnh dừng phải nằm trong một vòng lặp"
+"continue outside of loop"         = "lệnh tiếp tục phải nằm trong một vòng lặp"
+"bad operand type"                 = "toán tử không dùng được với kiểu dữ liệu này"
+"for-each not applicable"          = "«với mỗi» chỉ lặp được trên danh sách"
+"no suitable method found for add" = "kiểu của giá trị không khớp với kiểu phần tử của danh sách"
+"ConcurrentModificationException"  = "không được thêm hay xóa phần tử của danh sách đang được lặp qua"
+"IndexOutOfBoundsException"        = "chỉ số nằm ngoài danh sách"
+"NumberFormatException"            = "dữ liệu nhập không phải là số hợp lệ"
+"NoSuchElementException"           = "hết dữ liệu nhập"
+"StackOverflowError"               = "hàm gọi chính nó quá nhiều lần"
+"NullPointerException"             = "giá trị rỗng"

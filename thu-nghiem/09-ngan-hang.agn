@@ -1,0 +1,33 @@
+// 09. Tài khoản ngân hàng: nhiều hàm, biến dùng chung, kiểm tra điều kiện.
+Lớp Ngân Hàng {
+    đặt số thực số dư là 0
+
+    Hàm nạp tiền(số thực số tiền) {
+        nếu số tiền nhỏ hơn hoặc bằng 0 thì {
+            in("Số tiền không hợp lệ")
+            trả về
+        }
+        số dư += số tiền
+        in("Đã nạp {số tiền}, số dư: {số dư}")
+    }
+
+    Hàm rút tiền(số thực số tiền) trả về luận lý {
+        nếu số tiền lớn hơn số dư thì {
+            in("Không đủ tiền")
+            trả về sai
+        }
+        số dư -= số tiền
+        trả về đúng
+    }
+
+    Hàm gốc {
+        nạp tiền(500)
+        nạp tiền(-5)
+        nếu rút tiền(200) thì {
+            in("Rút thành công, còn {số dư}")
+        }
+        nếu không phải rút tiền(1000) thì {
+            in("Rút thất bại")
+        }
+    }
+}

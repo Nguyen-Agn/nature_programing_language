@@ -1,0 +1,32 @@
+// 03. Đệ quy: Fibonacci, giai thừa, lũy thừa, số lớn.
+Lớp Đệ Quy {
+    Hàm fibonacci(số nguyên n) trả về số nguyên lớn {
+        nếu n nhỏ hơn 2 thì {
+            trả về n
+        }
+        trả về fibonacci(n trừ 1) cộng fibonacci(n trừ 2)
+    }
+
+    Hàm giai thừa(số nguyên n) trả về số nguyên lớn {
+        nếu n nhỏ hơn hoặc bằng 1 thì {
+            trả về 1
+        }
+        trả về n nhân giai thừa(n trừ 1)
+    }
+
+    Hàm lũy thừa(số thực cơ số, số nguyên số mũ) trả về số thực {
+        đặt số thực kết quả là 1
+        lặp i từ 1 đến số mũ {
+            kết quả *= cơ số
+        }
+        trả về kết quả
+    }
+
+    Hàm gốc {
+        in("fib(30) = {fibonacci(30)}")
+        in("20! = {giai thừa(20)}")
+        in("2^10 = {lũy thừa(2, 10)}")
+        đặt số nguyên lớn dân số là 8000000000
+        in("Dân số: {dân số}")
+    }
+}

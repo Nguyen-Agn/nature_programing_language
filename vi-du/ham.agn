@@ -1,0 +1,34 @@
+// Ví dụ: hàm tự định nghĩa, kiểu dữ liệu, và tên có dấu.
+Lớp TínhToán {
+    Hàm tổng(số nguyên a và số nguyên b) trả về số nguyên {
+        trả về a cộng b
+    }
+
+    Hàm giai_thừa(số nguyên lớn n) trả về số nguyên lớn {
+        nếu n nhỏ hơn hoặc bằng 1 thì {
+            trả về 1
+        }
+        trả về n nhân giai_thừa(n trừ 1)
+    }
+
+    Hàm chào(chữ tên) {
+        in("Xin chào, " cộng tên cộng "!")
+    }
+
+    Hàm Ok(chuỗi mô) {
+        in("Đây là mô tả" cộng mô)
+    }
+
+    Hàm gốc {
+        chào("Thái")
+        đặt biến Tổng là tổng(2 và 3)
+        đặt biến Tôi là 2
+        đặt biến Tông là tổng(10, 20)
+        in("Tổng = " cộng Tổng cộng ", Tông = " cộng Tông)
+        in("10! = " cộng giai_thừa(10))
+
+        đặt số thực tỉ_lệ là 7 chia 2.0
+        đặt luận lý lớn là tỉ_lệ lớn hơn 3 và Tông trên Tổng
+        in("tỉ lệ = " cộng tỉ_lệ cộng ", lớn = " cộng lớn)
+    }
+}
