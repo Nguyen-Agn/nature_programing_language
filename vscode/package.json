@@ -1,38 +1,111 @@
 {
   "name": "anature",
   "displayName": "Anature",
-  "description": "Gợi ý khi gõ, báo lỗi và tô màu cho ngôn ngữ Anature (.agn)",
-  "version": "0.1.0",
+  "description": "Ngôn ngữ lập trình tiếng Việt với từ vựng cấu hình được: gợi ý khi gõ, báo lỗi, tô màu và chạy tệp .agn",
+  "version": "0.2.0",
   "publisher": "anature",
-  "engines": { "vscode": "^1.82.0" },
-  "categories": ["Programming Languages"],
-  "main": "./extension.js",
+  "icon": "images/icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Nguyen-Agn/nature_programing_language.git",
+    "directory": "vscode"
+  },
+  "bugs": {
+    "url": "https://github.com/Nguyen-Agn/nature_programing_language/issues"
+  },
+  "homepage": "https://github.com/Nguyen-Agn/nature_programing_language#readme",
+  "engines": {
+    "vscode": "^1.82.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Linters",
+    "Education"
+  ],
+  "keywords": [
+    "anature",
+    "tiếng Việt",
+    "vietnamese",
+    "agn",
+    "language server"
+  ],
+  "main": "./dist/extension.js",
   "contributes": {
     "languages": [
       {
         "id": "anature",
-        "aliases": ["Anature"],
-        "extensions": [".agn"],
-        "configuration": "./language-configuration.json"
+        "aliases": [
+          "Anature",
+          "anature"
+        ],
+        "extensions": [
+          ".agn"
+        ],
+        "configuration": "./language-configuration.json",
+        "icon": {
+          "light": "./images/icon.png",
+          "dark": "./images/icon.png"
+        }
       }
     ],
     "grammars": [
-      { "language": "anature", "scopeName": "source.anature", "path": "./anature.tmLanguage.json" }
+      {
+        "language": "anature",
+        "scopeName": "source.anature",
+        "path": "./syntaxes/anature.tmLanguage.json"
+      }
     ],
     "commands": [
-      { "command": "anature.run", "title": "Anature: Chạy tệp hiện tại", "icon": "$(play)" },
-      { "command": "anature.build", "title": "Anature: Sinh file Java" }
+      {
+        "command": "anature.run",
+        "title": "Chạy tệp hiện tại",
+        "category": "Anature",
+        "icon": "$(play)"
+      },
+      {
+        "command": "anature.build",
+        "title": "Sinh file Java",
+        "category": "Anature"
+      },
+      {
+        "command": "anature.restart",
+        "title": "Khởi động lại máy chủ gợi ý",
+        "category": "Anature"
+      }
     ],
     "menus": {
-      "editor/title/run": [{ "command": "anature.run", "when": "editorLangId == anature" }]
+      "editor/title/run": [
+        {
+          "command": "anature.run",
+          "when": "editorLangId == anature"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "anature.run",
+          "when": "editorLangId == anature"
+        },
+        {
+          "command": "anature.build",
+          "when": "editorLangId == anature"
+        }
+      ]
     },
+    "keybindings": [
+      {
+        "command": "anature.run",
+        "key": "ctrl+f5",
+        "mac": "cmd+f5",
+        "when": "editorLangId == anature"
+      }
+    ],
     "configuration": {
       "title": "Anature",
       "properties": {
         "anature.serverPath": {
           "type": "string",
-          "default": "anature",
-          "description": "Đường dẫn tới chương trình anature. Mặc định tìm trong PATH."
+          "default": "",
+          "markdownDescription": "Đường dẫn tới chương trình `anature`. Để trống thì dùng bản đi kèm phần mở rộng."
         }
       }
     },
@@ -44,7 +117,16 @@
       }
     }
   },
+  "scripts": {
+    "build": "node scripts/package.js --no-vsix",
+    "package": "node scripts/package.js",
+    "vscode:prepublish": "node scripts/package.js --no-vsix"
+  },
   "dependencies": {
     "vscode-languageclient": "^9.0.1"
+  },
+  "devDependencies": {
+    "@vscode/vsce": "^3.2.0",
+    "esbuild": "^0.24.0"
   }
 }

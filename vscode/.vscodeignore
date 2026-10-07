@@ -1,2 +1,9 @@
-node_modules/.package-lock.json
+# Gói .vsix chỉ cần: package.json, README, CHANGELOG, LICENSE, dist/, server/,
+# syntaxes/, images/ và language-configuration.json.
+.vscode/**
+node_modules/**
+src/**
+scripts/**
+package-lock.json
 *.vsix
+.gitignore

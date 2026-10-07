@@ -1,0 +1,12 @@
+# Sản phẩm của việc biên dịch
+/target/
+
+# Phần mở rộng VS Code: thư viện tải về và sản phẩm đóng gói
+/vscode/node_modules/
+/vscode/dist/
+/vscode/server/
+*.vsix
+
+# Mã Java sinh ra bởi `anature build`
+/vi-du/*.java
+/thu-nghiem/*.java
