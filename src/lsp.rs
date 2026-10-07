@@ -594,6 +594,50 @@ fn send(message: Value) {
     let _ = out.flush();
 }
 
+fn publish(uri: &str, diagnostics: Vec<Value>) {
+    send(json!({
+        "jsonrpc": "2.0",
+        "method": "textDocument/publishDiagnostics",
+        "params": { "uri": uri, "diagnostics": diagnostics },
+    }));
+}
+
+/// Phân tích lại một tệp nguồn và gửi chẩn đoán của nó, cùng chẩn đoán của file cấu
+/// hình mà nó dùng. `flagged`: các file cấu hình đang mang chẩn đoán lỗi.
+fn refresh(uri: &str, doc: &Doc, configs: &mut Configs, flagged: &mut Vec<PathBuf>) {
+    let (lang, broken) = configs.get(uri);
+    let mut found = diagnostics(lang, doc);
+    match &broken {
+        Some(b) => {
+            // Lỗi nằm ở file cấu hình, nên báo ở đó. Tệp nguồn chỉ nhận một lời nhắc
+            // (không phải lỗi) rằng nó đang được phân tích bằng cấu hình cũ.
+            publish(&path_uri(&b.path), vec![config_diagnostic(b)]);
+            if !flagged.contains(&b.path) {
+                flagged.push(b.path.clone());
+            }
+            found.push(json!({
+                "range": { "start": { "line": 0, "character": 0 }, "end": { "line": 0, "character": 1 } },
+                "severity": 2,
+                "source": "anature",
+                "message": format!(
+                    "{} đang có lỗi, nên tệp này được phân tích bằng bản cấu hình hợp lệ gần nhất.\n{}",
+                    b.path.display(),
+                    b.error
+                ),
+            }));
+        }
+        None => {
+            if let Some(path) = uri_path(uri).and_then(|p| crate::config_path(&p)) {
+                if let Some(i) = flagged.iter().position(|p| *p == path) {
+                    flagged.remove(i);
+                    publish(&path_uri(&path), Vec::new());
+                }
+            }
+        }
+    }
+    publish(uri, found);
+}
+
 pub fn serve() {
     let mut input = std::io::stdin().lock();
     let mut docs: HashMap<String, Doc> = HashMap::new();
@@ -605,14 +649,6 @@ pub fn serve() {
         let method = msg["method"].as_str().unwrap_or("");
         let params = &msg["params"];
         let uri = params["textDocument"]["uri"].as_str().unwrap_or("").to_string();
-        let publish = |uri: &str, diagnostics: Vec<Value>| {
-            send(json!({
-                "jsonrpc": "2.0",
-                "method": "textDocument/publishDiagnostics",
-                "params": { "uri": uri, "diagnostics": diagnostics },
-            }));
-        };
-
         let result = match method {
             "initialize" => json!({
                 "capabilities": {
@@ -632,38 +668,26 @@ pub fn serve() {
                     _ => params["contentChanges"][0]["text"].as_str(),
                 };
                 let doc = Doc::new(text.unwrap_or(""));
-                let (lang, broken) = configs.get(&uri);
-                let mut found = diagnostics(lang, &doc);
-                match &broken {
-                    Some(b) => {
-                        // Lỗi nằm ở file cấu hình, nên báo ở đó. Tệp nguồn chỉ nhận một lời
-                        // nhắc (không phải lỗi) rằng nó đang được phân tích bằng cấu hình cũ.
-                        publish(&path_uri(&b.path), vec![config_diagnostic(b)]);
-                        if !flagged.contains(&b.path) {
-                            flagged.push(b.path.clone());
-                        }
-                        found.push(json!({
-                            "range": { "start": { "line": 0, "character": 0 }, "end": { "line": 0, "character": 1 } },
-                            "severity": 2,
-                            "source": "anature",
-                            "message": format!(
-                                "{} đang có lỗi, nên tệp này được phân tích bằng bản cấu hình hợp lệ gần nhất.\n{}",
-                                b.path.display(),
-                                b.error
-                            ),
-                        }));
-                    }
-                    None => {
-                        if let Some(path) = uri_path(&uri).and_then(|p| crate::config_path(&p)) {
-                            if let Some(i) = flagged.iter().position(|p| *p == path) {
-                                flagged.remove(i);
-                                publish(&path_uri(&path), Vec::new());
-                            }
-                        }
-                    }
-                }
-                publish(&uri, found);
+                refresh(&uri, &doc, &mut configs, &mut flagged);
                 docs.insert(uri, doc);
+                continue;
+            }
+            // Một file language.toml vừa được lưu, tạo hoặc xóa: phân tích lại mọi tệp đang
+            // mở, để lỗi cũ trên file cấu hình biến mất ngay khi nó được sửa xong, và màu
+            // của các tệp nguồn theo kịp từ vựng mới.
+            "workspace/didChangeWatchedFiles" => {
+                for (uri, doc) in &docs {
+                    refresh(uri, doc, &mut configs, &mut flagged);
+                }
+                // File cấu hình không còn tồn tại thì không còn gì để báo trên nó.
+                flagged.retain(|path| {
+                    let gone = !path.is_file();
+                    if gone {
+                        publish(&path_uri(path), Vec::new());
+                    }
+                    !gone
+                });
+                send(json!({ "jsonrpc": "2.0", "id": "anature-refresh", "method": "workspace/semanticTokens/refresh" }));
                 continue;
             }
             "textDocument/didClose" => {

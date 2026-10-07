@@ -21,7 +21,7 @@ Lớp Điểm Số {
             }
             nếu điểm lớn hơn 10 thì {
                 in("Gặp điểm {điểm} không hợp lệ, dừng lại.")
-                dừng
+                dừng // break
             }
             tổng điểm += điểm
             số môn += 1
@@ -32,7 +32,7 @@ Lớp Điểm Số {
         in("Trung bình {số môn} môn: {điểm trung bình}, xếp loại {kết quả}")
 
         nếu kết quả bằng với "giỏi" thì {
-            in("Chúc mừng! Tên xếp loại dài {độ dài của kết quả} chữ.")
+            in("Chúc mừng! xếp loại dài {độ dài của kết quả} chữ.")
         }
     }
 }

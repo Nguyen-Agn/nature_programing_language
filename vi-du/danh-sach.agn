@@ -16,11 +16,11 @@ Lớp DanhSách {
         lặp i từ 1 đến n {
             thêm i nhân i vào bình_phương // [1,...n^2]
         }
-        in("Chào " + tên +  ", bình phương: " + bình_phương)
+        in("Chào {tên}, bình phương: " + bình_phương)
 
         bình_phương[0] là 100
         xóa phần tử thứ 1 khỏi bình_phương
-        in("Sau khi sửa: " cộng bình_phương)
+        in("Sau khi sửa: {bình_phương}")
         in("Phần tử cuối: " cộng bình_phương[độ dài của bình_phương trừ 1])
         in("Tổng: " cộng tổng(bình_phương))
 

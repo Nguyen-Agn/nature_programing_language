@@ -55,7 +55,17 @@ function runInTerminal(context, subcommand) {
 
 exports.activate = function (context) {
   const command = serverPath(context);
-  client = new LanguageClient("anature", "Anature", { command, args: ["lsp"] }, { documentSelector: [{ language: "anature" }] });
+  client = new LanguageClient(
+    "anature",
+    "Anature",
+    { command, args: ["lsp"] },
+    {
+      documentSelector: [{ language: "anature" }],
+      // Báo cho máy chủ mỗi khi một file cấu hình được lưu, để lỗi và màu cập nhật
+      // ngay mà không cần gõ gì vào tệp nguồn.
+      synchronize: { fileEvents: vscode.workspace.createFileSystemWatcher("**/language.toml") },
+    }
+  );
   client.start().catch((error) => {
     vscode.window.showErrorMessage(
       `Anature: không khởi động được "${command} lsp" (${error.message}). ` +
